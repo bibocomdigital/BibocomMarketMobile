@@ -1,0 +1,28 @@
+---
+description: Couches d’une feature Clean Architecture
+globs: lib/features/**/*.dart
+alwaysApply: false
+---
+
+# Couches d’une feature
+
+```
+features/<nom>/
+  domain/         entities, interfaces repository, use cases
+  data/           models, datasources, repository impl
+  presentation/   pages, widgets
+  providers/      Riverpod (DI + état)
+```
+
+Référence : `auth`.
+
+## Flux auth
+
+`login_page` → `loginUseCaseProvider` → `LoginUseCase` → `AuthRepositoryImpl` → `AuthRemoteDataSource`
+
+## Règles
+
+- Entity dans `domain`, Model (DTO) dans `data`. Mapping `toEntity()` dans le model.
+- Un use case = une action métier.
+- Repository : interface dans `domain`, impl dans `data`.
+- Page : `ConsumerWidget`. Aucun appel réseau direct.

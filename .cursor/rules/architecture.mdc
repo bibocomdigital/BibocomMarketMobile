@@ -1,0 +1,34 @@
+---
+description: Architecture Clean feature-first BiboMarket Mobile (Flutter)
+alwaysApply: true
+---
+
+# Architecture BiboMarket Mobile
+
+Clean Architecture **feature-first**. Riverpod = état + DI. GoRouter = navigation.
+Source de vérité : `ARCHITECTURE.md`.
+
+## Dossiers (`lib/`)
+
+- `config/` — env, router
+- `core/` — réseau, storage, erreurs, thème, auth Google
+- `features/` — `auth` (référence) et `home`
+- `shared/` — widgets / helpers transverses
+- `screens/` — splash / onboarding uniquement
+
+Ne pas recréer `course`, `payment`, `quiz`, `certification` sauf demande explicite.
+
+## Flux obligatoire
+
+`UI → Riverpod providers → UseCase → Repository → DataSource → API`
+
+Interdit : Dio ou SecureStorage dans un widget / une page.
+
+## Couches
+
+- `domain` : Dart pur. Pas de Flutter, Dio, Riverpod.
+- `data` : models, datasources, impl repository.
+- `presentation` : pages + widgets. Parle uniquement aux providers.
+- `providers` : câble UseCase / Repository et expose l’état.
+
+Copier `features/auth` pour toute nouvelle feature.

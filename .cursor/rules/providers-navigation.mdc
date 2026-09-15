@@ -1,0 +1,32 @@
+---
+description: Conventions Riverpod, GoRouter et réseau
+globs: lib/{config,core,features,shared}/**/*.dart
+alwaysApply: false
+---
+
+# Providers, navigation, réseau
+
+## Riverpod
+
+- DI : `Provider` pour Dio, datasources, repositories, use cases.
+- État : `Notifier` / `NotifierProvider`.
+- Suffixe `Provider` obligatoire (`loginUseCaseProvider`).
+- Pas de singletons globaux hors providers.
+
+## GoRouter
+
+- Routes dans `config/router`. Redirections selon la session.
+- Pas de `Navigator.push` pour les flux principaux.
+- Nouvelle page = constante dans `AppRoutes` + `GoRoute`.
+
+## Réseau
+
+- Un seul `Dio` via `dioProvider`. JWT dans `AuthInterceptor`.
+- Datasource = interface Retrofit, jamais Dio brut dans une feature.
+- Erreurs mappées via `ErrorMapper` vers `Failure`. Retourner `Result<T>`.
+
+## Stockage
+
+- Tokens : `flutter_secure_storage` (`TokenStorage`).
+- Préférences : `shared_preferences`.
+- Jamais de token dans un provider d’UI ou un widget.

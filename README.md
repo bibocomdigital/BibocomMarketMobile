@@ -1,18 +1,32 @@
-# bibomarketmobile
+# BiboMarket Mobile
 
-A new Flutter project.
+Socle Flutter — Clean Architecture feature-first, Riverpod, GoRouter.
 
-## Getting Started
+**Lire [ARCHITECTURE.md](./ARCHITECTURE.md) avant toute contribution.**
 
-This project is a starting point for a Flutter application.
+## Stack
 
-A few resources to get you started if this is your first Flutter project:
+- État / DI : `flutter_riverpod`
+- Navigation : `go_router`
+- Réseau : `dio` + interceptor JWT
+- Stockage : `flutter_secure_storage`, `shared_preferences`
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+## Démarrage
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# BibocomMarketMobile
+```bash
+flutter pub get
+flutter run
+```
+
+## Structure
+
+```
+lib/
+  config/     env, router
+  core/       réseau, storage, erreurs, thème, auth Google
+  features/   auth, home
+  shared/     widgets et helpers communs
+  screens/    splash / onboarding
+```
+
+Référence : `lib/features/auth`.
