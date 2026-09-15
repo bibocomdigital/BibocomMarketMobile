@@ -47,8 +47,16 @@ abstract final class ErrorMapper {
   }
 
   static String? _messageFromBody(Object? data) {
-    if (data is Map && data['message'] is String) {
-      return data['message'] as String;
+    if (data is Map) {
+      if (data['message'] is String) return data['message'] as String;
+      final error = data['error'];
+      if (error is Map && error['message'] is String) {
+        return error['message'] as String;
+      }
+      final nested = data['data'];
+      if (nested is Map && nested['message'] is String) {
+        return nested['message'] as String;
+      }
     }
     return null;
   }

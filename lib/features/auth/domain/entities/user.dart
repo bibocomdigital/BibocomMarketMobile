@@ -1,13 +1,21 @@
 class User {
   const User({
     required this.id,
-    required this.email,
-    required this.firstName,
-    required this.lastName,
     required this.role,
+    this.email = '',
+    this.firstName = '',
+    this.lastName = '',
     this.phoneNumber,
     this.photo,
+    this.whatsappNumber,
+    this.city,
+    this.country,
+    this.gender,
+    this.language = 'fr',
+    this.currency = 'CFA',
+    this.timezone = 'Africa/Dakar',
     this.isVerified = false,
+    this.profileCompletion = 0,
   });
 
   final int id;
@@ -17,7 +25,20 @@ class User {
   final String role;
   final String? phoneNumber;
   final String? photo;
+  final String? whatsappNumber;
+  final String? city;
+  final String? country;
+  final String? gender;
+  final String language;
+  final String currency;
+  final String timezone;
   final bool isVerified;
+  final int profileCompletion;
 
-  String get displayName => '$firstName $lastName'.trim();
+  bool get isClient => role == 'CLIENT';
+
+  String get displayName {
+    final name = '$firstName $lastName'.trim();
+    return name.isEmpty ? 'Client' : name;
+  }
 }

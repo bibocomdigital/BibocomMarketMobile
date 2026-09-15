@@ -1,3 +1,4 @@
+import 'package:bibomarketmobile/core/network/api_envelope.dart';
 import 'package:bibomarketmobile/features/auth/data/models/user_model.dart';
 import 'package:bibomarketmobile/features/auth/domain/entities/auth_session.dart';
 
@@ -11,9 +12,11 @@ class AuthResponseModel {
   final UserModel user;
 
   factory AuthResponseModel.fromJson(Map<String, dynamic> json) {
+    final payload = unwrapApiMap(json);
+    final userJson = asMap(payload['user']) ?? payload;
     return AuthResponseModel(
-      token: json['token'] as String,
-      user: UserModel.fromJson(json['user'] as Map<String, dynamic>),
+      token: asString(payload['token']),
+      user: UserModel.fromJson(userJson),
     );
   }
 
@@ -25,5 +28,10 @@ class AuthResponseModel {
   AuthSession toEntity() => AuthSession(
         token: token,
         user: user.toEntity(),
+      );
+
+  AuthResponseModel copyWithUser(UserModel user) => AuthResponseModel(
+        token: token,
+        user: user,
       );
 }

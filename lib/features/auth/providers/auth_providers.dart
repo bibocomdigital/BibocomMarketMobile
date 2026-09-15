@@ -1,10 +1,12 @@
 import 'package:bibomarketmobile/core/auth/google_auth_service.dart';
 import 'package:bibomarketmobile/core/error/error_mapper.dart';
 import 'package:bibomarketmobile/core/providers/core_providers.dart';
+import 'package:bibomarketmobile/core/result/result.dart';
 import 'package:bibomarketmobile/core/usecase/usecase.dart';
 import 'package:bibomarketmobile/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:bibomarketmobile/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:bibomarketmobile/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:bibomarketmobile/features/auth/domain/entities/auth_session.dart';
 import 'package:bibomarketmobile/features/auth/domain/repositories/auth_repository.dart';
 import 'package:bibomarketmobile/features/auth/domain/usecases/login_usecase.dart';
 import 'package:bibomarketmobile/features/auth/domain/usecases/login_with_google_usecase.dart';
@@ -117,5 +119,86 @@ class AuthNotifier extends Notifier<AuthState> {
   Future<void> logout() async {
     await ref.read(logoutUseCaseProvider).call(const NoParams());
     state = const AuthState();
+  }
+
+  Future<Result<String>> register({
+    required String firstName,
+    required String lastName,
+    required String phoneNumber,
+    required String password,
+    required String role,
+    String? email,
+  }) {
+    return ref.read(authRepositoryProvider).register(
+          firstName: firstName,
+          lastName: lastName,
+          phoneNumber: phoneNumber,
+          password: password,
+          role: role,
+          email: email,
+        );
+  }
+
+  Future<bool> verifyEmail({required String email, required String code}) async {
+    state = state.copyWith(isLoading: true, clearFailure: true);
+    final result = await ref.read(authRepositoryProvider).verifyEmail(
+          email: email,
+          code: code,
+        );
+    return result.fold(
+      failure: (failure) {
+        state = state.copyWith(isLoading: false, failure: failure);
+        return false;
+      },
+      success: (session) {
+        state = AuthState(session: session);
+        return true;
+      },
+    );
+  }
+
+  Future<bool> updateProfile(Map<String, dynamic> body) async {
+    state = state.copyWith(isLoading: true, clearFailure: true);
+    final result = await ref.read(authRepositoryProvider).updateProfile(body);
+    return result.fold(
+      failure: (failure) {
+        state = state.copyWith(isLoading: false, failure: failure);
+        return false;
+      },
+      success: (user) {
+        final session = state.session;
+        if (session == null) {
+          state = state.copyWith(isLoading: false);
+          return false;
+        }
+        state = AuthState(session: AuthSession(token: session.token, user: user));
+        return true;
+      },
+    );
+  }
+
+  Future<bool> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    final result = await ref.read(authRepositoryProvider).changePassword(
+          currentPassword: currentPassword,
+          newPassword: newPassword,
+        );
+    return result.fold(failure: (_) => false, success: (_) => true);
+  }
+
+  Future<bool> deleteAccount() async {
+    final result = await ref.read(authRepositoryProvider).deleteAccount();
+    return result.fold(
+      failure: (failure) {
+        state = state.copyWith(failure: failure);
+        return false;
+      },
+      success: (_) {
+        state = const AuthState();
+        return true;
+      },
+    );
   }
 }

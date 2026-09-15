@@ -8,7 +8,7 @@ class LoginForm extends StatefulWidget {
     this.errorMessage,
   });
 
-  final void Function(String email, String password) onSubmit;
+  final void Function(String identifier, String password) onSubmit;
   final bool isLoading;
   final String? errorMessage;
 
@@ -18,19 +18,19 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
-  final _email = TextEditingController();
+  final _identifier = TextEditingController();
   final _password = TextEditingController();
 
   @override
   void dispose() {
-    _email.dispose();
+    _identifier.dispose();
     _password.dispose();
     super.dispose();
   }
 
   void _submit() {
     if (!(_formKey.currentState?.validate() ?? false)) return;
-    widget.onSubmit(_email.text.trim(), _password.text);
+    widget.onSubmit(_identifier.text.trim(), _password.text);
   }
 
   @override
@@ -41,29 +41,22 @@ class _LoginFormState extends State<LoginForm> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextFormField(
-            controller: _email,
+            controller: _identifier,
             keyboardType: TextInputType.emailAddress,
-            autofillHints: const [AutofillHints.email],
-            decoration: const InputDecoration(labelText: 'Email'),
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Email requis';
-              }
-              return null;
-            },
+            decoration: const InputDecoration(
+              labelText: 'Email ou téléphone',
+              hintText: '+223 70 00 00 00',
+            ),
+            validator: (value) =>
+                value == null || value.trim().isEmpty ? 'Identifiant requis' : null,
           ),
           const SizedBox(height: 12),
           TextFormField(
             controller: _password,
             obscureText: true,
-            autofillHints: const [AutofillHints.password],
             decoration: const InputDecoration(labelText: 'Mot de passe'),
-            validator: (value) {
-              if (value == null || value.length < 6) {
-                return 'Au moins 6 caractères';
-              }
-              return null;
-            },
+            validator: (value) =>
+                value == null || value.length < 6 ? 'Au moins 6 caractères' : null,
           ),
           if (widget.errorMessage != null) ...[
             const SizedBox(height: 12),
@@ -75,7 +68,7 @@ class _LoginFormState extends State<LoginForm> {
           const SizedBox(height: 20),
           FilledButton(
             onPressed: widget.isLoading ? null : _submit,
-            child: const Text('Connexion'),
+            child: const Text('Se connecter'),
           ),
         ],
       ),

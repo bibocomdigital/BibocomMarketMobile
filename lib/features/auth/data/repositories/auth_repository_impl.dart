@@ -4,14 +4,17 @@ import 'package:bibomarketmobile/features/auth/data/datasources/auth_local_datas
 import 'package:bibomarketmobile/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:bibomarketmobile/features/auth/data/models/google_auth_request_model.dart';
 import 'package:bibomarketmobile/features/auth/data/models/login_request_model.dart';
+import 'package:bibomarketmobile/features/auth/data/models/register_request_model.dart';
 import 'package:bibomarketmobile/features/auth/domain/entities/auth_session.dart';
+import 'package:bibomarketmobile/features/auth/domain/entities/user.dart';
 import 'package:bibomarketmobile/features/auth/domain/repositories/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({
-    required this._remote,
-    required this._local,
-  });
+    required AuthRemoteDataSource remote,
+    required AuthLocalDataSource local,
+  })  : _remote = remote,
+        _local = local;
 
   final AuthRemoteDataSource _remote;
   final AuthLocalDataSource _local;
@@ -51,6 +54,106 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<Result<String>> register({
+    required String firstName,
+    required String lastName,
+    required String phoneNumber,
+    required String password,
+    required String role,
+    String? email,
+  }) async {
+    try {
+      final message = await _remote.register(
+        RegisterRequestModel(
+          firstName: firstName,
+          lastName: lastName,
+          phoneNumber: phoneNumber,
+          password: password,
+          role: role,
+          email: email,
+        ),
+      );
+      return Success(message);
+    } catch (error) {
+      return Err(ErrorMapper.map(error));
+    }
+  }
+
+  @override
+  Future<Result<AuthSession>> verifyEmail({
+    required String email,
+    required String code,
+  }) async {
+    try {
+      final response = await _remote.verify(email: email, code: code);
+      await _local.cacheSession(response);
+      return Success(response.toEntity());
+    } catch (error) {
+      return Err(ErrorMapper.map(error));
+    }
+  }
+
+  @override
+  Future<Result<User>> getProfile() async {
+    try {
+      return Success((await _remote.getProfile()).toEntity());
+    } catch (error) {
+      return Err(ErrorMapper.map(error));
+    }
+  }
+
+  @override
+  Future<Result<User>> updateProfile(Map<String, dynamic> body) async {
+    try {
+      final model = await _remote.updateProfile(body);
+      final cached = await _local.readSession();
+      if (cached != null) {
+        await _local.cacheSession(cached.copyWithUser(model));
+      }
+      return Success(model.toEntity());
+    } catch (error) {
+      return Err(ErrorMapper.map(error));
+    }
+  }
+
+  @override
+  Future<Result<void>> completePersonalInfo(Map<String, dynamic> body) async {
+    try {
+      await _remote.completePersonalInfo(body);
+      return const Success(null);
+    } catch (error) {
+      return Err(ErrorMapper.map(error));
+    }
+  }
+
+  @override
+  Future<Result<void>> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    try {
+      await _remote.changePassword(
+        currentPassword: currentPassword,
+        newPassword: newPassword,
+      );
+      return const Success(null);
+    } catch (error) {
+      return Err(ErrorMapper.map(error));
+    }
+  }
+
+  @override
+  Future<Result<void>> deleteAccount() async {
+    try {
+      await _remote.deleteAccount();
+      await _local.clear();
+      return const Success(null);
+    } catch (error) {
+      return Err(ErrorMapper.map(error));
+    }
+  }
+
+  @override
   Future<Result<AuthSession?>> restoreSession() async {
     try {
       final cached = await _local.readSession();
@@ -63,9 +166,11 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Result<void>> logout() async {
     try {
+      await _remote.logoutRemote();
       await _local.clear();
       return const Success(null);
     } catch (error) {
+      await _local.clear();
       return Err(ErrorMapper.map(error));
     }
   }

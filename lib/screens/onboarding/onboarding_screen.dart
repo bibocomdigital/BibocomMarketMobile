@@ -31,7 +31,7 @@ class OnboardingScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 12),
               const Text(
-                'Formations et marketplace, au même endroit.',
+                'Marketplace au Mali, au même endroit.',
                 textAlign: TextAlign.center,
               ),
               const Spacer(),
@@ -41,7 +41,7 @@ class OnboardingScreen extends ConsumerWidget {
                         StorageKeys.onboardingDone,
                         value: true,
                       );
-                  if (context.mounted) context.go(AppRoutes.login);
+                  if (context.mounted) context.go(AppRoutes.roleSelect);
                 },
                 child: const Text('Commencer'),
               ),
