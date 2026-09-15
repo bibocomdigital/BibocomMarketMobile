@@ -1,6 +1,31 @@
+import 'package:bibomarketmobile/core/constants/app_constants.dart';
 import 'package:bibomarketmobile/core/result/result.dart';
 import 'package:bibomarketmobile/features/auth/domain/entities/auth_session.dart';
 import 'package:bibomarketmobile/features/auth/domain/entities/user.dart';
+
+class RegisterParams {
+  const RegisterParams({
+    required this.firstName,
+    required this.lastName,
+    required this.phoneNumber,
+    required this.password,
+    this.email = '',
+    this.role = UserRoles.client,
+    this.shopName,
+    this.shopSector,
+    this.categorieShopId,
+  });
+
+  final String email;
+  final String password;
+  final String firstName;
+  final String lastName;
+  final String phoneNumber;
+  final String role;
+  final String? shopName;
+  final String? shopSector;
+  final int? categorieShopId;
+}
 
 abstract class AuthRepository {
   Future<Result<AuthSession>> login({
@@ -11,14 +36,7 @@ abstract class AuthRepository {
 
   Future<Result<AuthSession>> loginWithGoogle(String idToken);
 
-  Future<Result<String>> register({
-    required String firstName,
-    required String lastName,
-    required String phoneNumber,
-    required String password,
-    required String role,
-    String? email,
-  });
+  Future<Result<String>> register(RegisterParams params);
 
   Future<Result<AuthSession>> verifyEmail({
     required String email,

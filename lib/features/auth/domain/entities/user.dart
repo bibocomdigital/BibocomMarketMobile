@@ -35,10 +35,15 @@ class User {
   final bool isVerified;
   final int profileCompletion;
 
-  bool get isClient => role == 'CLIENT';
+  bool get isClient =>
+      role.toUpperCase() == 'CLIENT' || role.toUpperCase() == 'CUSTOMER';
+
+  bool get isMerchant =>
+      role.toUpperCase() == 'MERCHANT' || role.toUpperCase() == 'COMMERCANT';
 
   String get displayName {
     final name = '$firstName $lastName'.trim();
-    return name.isEmpty ? 'Client' : name;
+    if (name.isNotEmpty) return name;
+    return isMerchant ? 'Commerçant' : 'Client';
   }
 }

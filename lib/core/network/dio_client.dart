@@ -17,6 +17,16 @@ abstract final class DioClient {
       ),
     );
 
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          if (options.data is FormData) {
+            options.headers.remove(Headers.contentTypeHeader);
+          }
+          handler.next(options);
+        },
+      ),
+    );
     dio.interceptors.add(AuthInterceptor(tokenStorage));
 
     if (!AppEnv.isRelease) {

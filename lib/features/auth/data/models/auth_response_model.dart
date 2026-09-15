@@ -11,11 +11,15 @@ class AuthResponseModel {
   final String token;
   final UserModel user;
 
-  factory AuthResponseModel.fromJson(Map<String, dynamic> json) {
+  factory AuthResponseModel.fromJson(dynamic json) {
     final payload = unwrapApiMap(json);
+    final tokens = asMap(payload['tokens']) ?? const {};
+    final token = asString(
+      payload['token'] ?? payload['access'] ?? tokens['access'],
+    );
     final userJson = asMap(payload['user']) ?? payload;
     return AuthResponseModel(
-      token: asString(payload['token']),
+      token: token,
       user: UserModel.fromJson(userJson),
     );
   }

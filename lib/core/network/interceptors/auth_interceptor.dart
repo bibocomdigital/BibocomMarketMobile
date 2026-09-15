@@ -24,7 +24,11 @@ class AuthInterceptor extends Interceptor {
     ErrorInterceptorHandler handler,
   ) async {
     if (err.response?.statusCode == 401) {
-      await _tokenStorage.clear();
+      final path = err.requestOptions.path;
+      if (!path.contains('/auth/login') &&
+          !path.contains('/auth/register')) {
+        await _tokenStorage.clear();
+      }
     }
     handler.next(err);
   }

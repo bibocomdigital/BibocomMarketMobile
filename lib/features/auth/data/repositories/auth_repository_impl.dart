@@ -1,5 +1,7 @@
+import 'package:bibomarketmobile/core/constants/app_constants.dart';
 import 'package:bibomarketmobile/core/error/error_mapper.dart';
 import 'package:bibomarketmobile/core/result/result.dart';
+import 'package:bibomarketmobile/core/storage/local_storage_service.dart';
 import 'package:bibomarketmobile/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:bibomarketmobile/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:bibomarketmobile/features/auth/data/models/google_auth_request_model.dart';
@@ -13,11 +15,14 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({
     required AuthRemoteDataSource remote,
     required AuthLocalDataSource local,
+    required LocalStorageService prefs,
   })  : _remote = remote,
-        _local = local;
+        _local = local,
+        _prefs = prefs;
 
   final AuthRemoteDataSource _remote;
   final AuthLocalDataSource _local;
+  final LocalStorageService _prefs;
 
   @override
   Future<Result<AuthSession>> login({
@@ -54,25 +59,42 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Result<String>> register({
-    required String firstName,
-    required String lastName,
-    required String phoneNumber,
-    required String password,
-    required String role,
-    String? email,
-  }) async {
+  Future<Result<String>> register(RegisterParams params) async {
     try {
       final message = await _remote.register(
         RegisterRequestModel(
-          firstName: firstName,
-          lastName: lastName,
-          phoneNumber: phoneNumber,
-          password: password,
-          role: role,
-          email: email,
+          firstName: params.firstName,
+          lastName: params.lastName,
+          phoneNumber: params.phoneNumber,
+          password: params.password,
+          role: params.role,
+          email: params.email.isEmpty ? null : params.email,
         ),
       );
+      if (params.shopName != null && params.shopName!.trim().isNotEmpty) {
+        await _prefs.setString(
+          StorageKeys.pendingShopName,
+          params.shopName!.trim(),
+        );
+      }
+      if (params.shopSector != null && params.shopSector!.trim().isNotEmpty) {
+        await _prefs.setString(
+          StorageKeys.pendingShopSector,
+          params.shopSector!.trim(),
+        );
+      }
+      if (params.categorieShopId != null) {
+        await _prefs.setString(
+          StorageKeys.pendingShopCategoryId,
+          '${params.categorieShopId}',
+        );
+      }
+      if (params.phoneNumber.trim().isNotEmpty) {
+        await _prefs.setString(
+          StorageKeys.pendingShopPhone,
+          params.phoneNumber.trim(),
+        );
+      }
       return Success(message);
     } catch (error) {
       return Err(ErrorMapper.map(error));

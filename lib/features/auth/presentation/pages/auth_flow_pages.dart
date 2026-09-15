@@ -2,6 +2,7 @@ import 'package:bibomarketmobile/config/router/app_routes.dart';
 import 'package:bibomarketmobile/core/constants/app_constants.dart';
 import 'package:bibomarketmobile/core/providers/core_providers.dart';
 import 'package:bibomarketmobile/core/theme/app_colors.dart';
+import 'package:bibomarketmobile/features/auth/domain/repositories/auth_repository.dart';
 import 'package:bibomarketmobile/features/auth/providers/auth_providers.dart';
 import 'package:bibomarketmobile/shared/helpers/context_extensions.dart';
 import 'package:bibomarketmobile/shared/widgets/otp_code_field.dart';
@@ -46,12 +47,14 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
         UserRoles.client;
     final email = _email.text.trim();
     final result = await ref.read(authNotifierProvider.notifier).register(
-          firstName: _firstName.text.trim(),
-          lastName: _lastName.text.trim(),
-          phoneNumber: _phone.text.trim(),
-          password: _password.text,
-          role: role,
-          email: email.isEmpty ? null : email,
+          RegisterParams(
+            firstName: _firstName.text.trim(),
+            lastName: _lastName.text.trim(),
+            phoneNumber: _phone.text.trim(),
+            password: _password.text,
+            role: role,
+            email: email,
+          ),
         );
     if (!mounted) return;
     setState(() => _loading = false);
@@ -190,7 +193,11 @@ class _RoleSelectPageState extends ConsumerState<RoleSelectPage> {
                         _role,
                       );
                   if (!context.mounted) return;
-                  context.go(AppRoutes.register);
+                  context.go(
+                    _role == UserRoles.merchant
+                        ? AppRoutes.merchantRegister
+                        : AppRoutes.register,
+                  );
                 },
               ),
             ],

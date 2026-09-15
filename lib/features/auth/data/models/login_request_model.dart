@@ -10,8 +10,9 @@ class LoginRequestModel {
   final String password;
 
   Map<String, dynamic> toJson() => {
-        if (email != null) 'email': email,
-        if (phoneNumber != null) 'phoneNumber': phoneNumber,
+        if (email != null && email!.isNotEmpty) 'email': email,
+        if (phoneNumber != null && phoneNumber!.isNotEmpty)
+          'phoneNumber': phoneNumber,
         'password': password,
       };
 }
