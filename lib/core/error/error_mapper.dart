@@ -1,6 +1,7 @@
 import 'package:bibomarketmobile/core/error/exceptions.dart';
 import 'package:bibomarketmobile/core/error/failures.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
 
 abstract final class ErrorMapper {
   static Failure map(Object error) {
@@ -15,11 +16,28 @@ abstract final class ErrorMapper {
       };
     }
 
+    if (error is PlatformException) {
+      return _fromPlatform(error);
+    }
+
     if (error is DioException) {
       return _fromDio(error);
     }
 
     return UnknownFailure(error.toString());
+  }
+
+  static Failure _fromPlatform(PlatformException error) {
+    final details = '${error.code} ${error.message ?? ''} ${error.details ?? ''}';
+    if (error.code == 'sign_in_failed' || details.contains('ApiException: 10')) {
+      return const AuthFailure(
+        'Connexion Google non configurée pour cette app. Utilisez email ou téléphone.',
+      );
+    }
+    if (error.code == 'network_error') {
+      return const NetworkFailure();
+    }
+    return AuthFailure(error.message ?? 'Connexion Google impossible.');
   }
 
   static Failure _fromDio(DioException error) {
@@ -47,8 +65,17 @@ abstract final class ErrorMapper {
   }
 
   static String? _messageFromBody(Object? data) {
-    if (data is Map && data['message'] is String) {
-      return data['message'] as String;
+    if (data is Map) {
+      final message = data['message'];
+      if (message is String && message.isNotEmpty) return message;
+      if (message is List && message.isNotEmpty) {
+        return message.map((item) => item.toString()).join('\n');
+      }
+      final error = data['error'];
+      if (error is String && error.isNotEmpty) return error;
+      if (error is Map && error['message'] is String) {
+        return error['message'] as String;
+      }
     }
     return null;
   }

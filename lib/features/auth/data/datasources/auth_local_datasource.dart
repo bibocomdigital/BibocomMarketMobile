@@ -8,9 +8,10 @@ import 'package:bibomarketmobile/features/auth/data/models/auth_response_model.d
 
 class AuthLocalDataSource {
   AuthLocalDataSource({
-    required this._tokenStorage,
-    required this._localStorage,
-  });
+    required TokenStorage tokenStorage,
+    required LocalStorageService localStorage,
+  })  : _tokenStorage = tokenStorage,
+        _localStorage = localStorage;
 
   final TokenStorage _tokenStorage;
   final LocalStorageService _localStorage;

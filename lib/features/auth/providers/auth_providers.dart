@@ -9,6 +9,7 @@ import 'package:bibomarketmobile/features/auth/domain/repositories/auth_reposito
 import 'package:bibomarketmobile/features/auth/domain/usecases/login_usecase.dart';
 import 'package:bibomarketmobile/features/auth/domain/usecases/login_with_google_usecase.dart';
 import 'package:bibomarketmobile/features/auth/domain/usecases/logout_usecase.dart';
+import 'package:bibomarketmobile/features/auth/domain/usecases/register_usecase.dart';
 import 'package:bibomarketmobile/features/auth/domain/usecases/restore_session_usecase.dart';
 import 'package:bibomarketmobile/features/auth/providers/auth_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,7 +33,12 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return AuthRepositoryImpl(
     remote: ref.watch(authRemoteDataSourceProvider),
     local: ref.watch(authLocalDataSourceProvider),
+    prefs: ref.watch(localStorageServiceProvider),
   );
+});
+
+final registerUseCaseProvider = Provider<RegisterUseCase>((ref) {
+  return RegisterUseCase(ref.watch(authRepositoryProvider));
 });
 
 final loginUseCaseProvider = Provider<LoginUseCase>((ref) {
@@ -114,8 +120,27 @@ class AuthNotifier extends Notifier<AuthState> {
     }
   }
 
+  Future<bool> register(RegisterParams params) async {
+    state = state.copyWith(isLoading: true, clearFailure: true);
+    final result = await ref.read(registerUseCaseProvider).call(params);
+    return result.fold(
+      failure: (failure) {
+        state = state.copyWith(isLoading: false, failure: failure);
+        return false;
+      },
+      success: (_) {
+        state = state.copyWith(isLoading: false);
+        return true;
+      },
+    );
+  }
+
   Future<void> logout() async {
     await ref.read(logoutUseCaseProvider).call(const NoParams());
     state = const AuthState();
+  }
+
+  void clearFailure() {
+    state = state.copyWith(clearFailure: true);
   }
 }

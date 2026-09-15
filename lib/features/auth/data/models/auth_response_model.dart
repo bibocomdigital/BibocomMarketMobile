@@ -1,3 +1,4 @@
+import 'package:bibomarketmobile/core/utils/json_utils.dart';
 import 'package:bibomarketmobile/features/auth/data/models/user_model.dart';
 import 'package:bibomarketmobile/features/auth/domain/entities/auth_session.dart';
 
@@ -11,9 +12,13 @@ class AuthResponseModel {
   final UserModel user;
 
   factory AuthResponseModel.fromJson(Map<String, dynamic> json) {
+    final tokens = asJsonMap(json['tokens']);
+    final token = asString(
+      json['token'] ?? json['access'] ?? tokens['access'],
+    );
     return AuthResponseModel(
-      token: json['token'] as String,
-      user: UserModel.fromJson(json['user'] as Map<String, dynamic>),
+      token: token,
+      user: UserModel.fromJson(asJsonMap(json['user'])),
     );
   }
 

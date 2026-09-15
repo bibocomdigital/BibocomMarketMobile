@@ -1,3 +1,4 @@
+import 'package:bibomarketmobile/core/utils/json_utils.dart';
 import 'package:bibomarketmobile/features/auth/domain/entities/user.dart';
 
 class UserModel {
@@ -23,14 +24,14 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: json['id'] as int,
-      email: json['email'] as String,
-      firstName: json['firstName'] as String? ?? '',
-      lastName: json['lastName'] as String? ?? '',
-      role: json['role'] as String? ?? '',
-      phoneNumber: json['phoneNumber'] as String?,
-      photo: json['photo'] as String?,
-      isVerified: json['isVerified'] as bool? ?? false,
+      id: asInt(json['id']),
+      email: asString(json['email']),
+      firstName: asString(json['firstName']),
+      lastName: asString(json['lastName']),
+      role: asString(json['role']),
+      phoneNumber: json['phoneNumber']?.toString(),
+      photo: json['photo']?.toString(),
+      isVerified: asBool(json['isVerified'], true),
     );
   }
 

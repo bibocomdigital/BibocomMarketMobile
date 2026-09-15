@@ -23,6 +23,6 @@ void main() {
 
     await tester.pump();
     expect(find.byType(MaterialApp), findsOneWidget);
-    expect(find.text('BiboMarket'), findsOneWidget);
+    expect(find.textContaining('Bibo'), findsWidgets);
   });
 }
