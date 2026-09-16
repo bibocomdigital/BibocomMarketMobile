@@ -65,7 +65,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                   child: ListView.separated(
                     padding: const EdgeInsets.all(16),
                     itemCount: data.items.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 12),
+                    separatorBuilder: (_, _) => const SizedBox(height: 12),
                     itemBuilder: (context, index) {
                       final item = data.items[index];
                       return AppCard(
@@ -260,7 +260,7 @@ class OrdersPage extends ConsumerWidget {
             child: ListView.separated(
               padding: const EdgeInsets.all(16),
               itemCount: items.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              separatorBuilder: (_, _) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
                 final order = items[index];
                 return AppCard(

@@ -27,12 +27,12 @@ class ClientRemoteDataSource {
         'page': page,
         'limit': 20,
         'status': 'PUBLISHED',
-        if (categoryId != null) 'category': categoryId,
+        'category': ?categoryId,
         if (search != null && search.isNotEmpty) 'query': search,
-        if (minPrice != null) 'minPrice': minPrice,
-        if (maxPrice != null) 'maxPrice': maxPrice,
-        if (sortBy != null) 'sortBy': sortBy,
-        if (order != null) 'order': order,
+        'minPrice': ?minPrice,
+        'maxPrice': ?maxPrice,
+        'sortBy': ?sortBy,
+        'order': ?order,
       },
     );
     return _productsFrom(response.data);
@@ -188,7 +188,7 @@ class ClientRemoteDataSource {
   Future<CheckoutResult> checkout({String? message}) async {
     final response = await _dio.post<dynamic>(
       ApiEndpoints.cartOrder,
-      data: {if (message != null) 'message': message},
+      data: {'message': ?message},
     );
     final map = unwrapApiMap(response.data);
     final order = asMap(map['order']) ?? map;
@@ -203,7 +203,7 @@ class ClientRemoteDataSource {
   Future<void> shareCartWhatsApp({String? message}) async {
     await _dio.post<dynamic>(
       ApiEndpoints.cartShare,
-      data: {if (message != null) 'message': message},
+      data: {'message': ?message},
     );
   }
 
