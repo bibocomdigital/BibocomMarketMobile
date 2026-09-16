@@ -1,6 +1,46 @@
 import 'package:bibomarketmobile/core/theme/app_colors.dart';
+import 'package:bibomarketmobile/shared/helpers/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+
+class BiboAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const BiboAppBar({
+    super.key,
+    required this.title,
+    this.actions,
+    this.bottom,
+    this.showBack = true,
+    this.fallbackRoute,
+  });
+
+  final String title;
+  final List<Widget>? actions;
+  final PreferredSizeWidget? bottom;
+  final bool showBack;
+  final String? fallbackRoute;
+
+  @override
+  Size get preferredSize => Size.fromHeight(
+        kToolbarHeight + (bottom?.preferredSize.height ?? 0),
+      );
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      automaticallyImplyLeading: false,
+      title: Text(title),
+      actions: actions,
+      bottom: bottom,
+      leading: showBack
+          ? IconButton(
+              tooltip: 'Retour',
+              icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 18),
+              onPressed: () => context.popOrFallback(fallback: fallbackRoute),
+            )
+          : null,
+    );
+  }
+}
 
 class AppCard extends StatelessWidget {
   const AppCard({

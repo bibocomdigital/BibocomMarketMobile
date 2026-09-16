@@ -86,7 +86,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
     final me = ref.watch(authNotifierProvider).user?.id;
     final thread = ref.watch(threadProvider(widget.partnerId));
     return Scaffold(
-      appBar: AppBar(title: Text(widget.partnerName)),
+      appBar: BiboAppBar(title: widget.partnerName),
       body: Column(
         children: [
           Expanded(

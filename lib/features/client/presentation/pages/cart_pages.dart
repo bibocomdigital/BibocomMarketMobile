@@ -208,6 +208,7 @@ class OrderConfirmedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const BiboAppBar(title: 'Commande confirmée'),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -246,7 +247,7 @@ class OrdersPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final orders = ref.watch(clientOrdersProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Mes commandes')),
+      appBar: const BiboAppBar(title: 'Mes commandes'),
       body: orders.when(
         loading: () => const AppLoader(),
         error: (error, _) => ErrorView(
@@ -304,7 +305,7 @@ class OrderDetailPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final order = ref.watch(orderProvider(orderId));
     return Scaffold(
-      appBar: AppBar(title: Text('Commande COM-${orderId.toString().padLeft(6, '0')}')),
+      appBar: BiboAppBar(title: 'Commande COM-${orderId.toString().padLeft(6, '0')}'),
       body: order.when(
         loading: () => const AppLoader(),
         error: (error, _) => ErrorView(message: error.toString()),
@@ -416,7 +417,7 @@ class WhatsAppPage extends ConsumerWidget {
       }
     }
     return Scaffold(
-      appBar: AppBar(title: const Text('WhatsApp')),
+      appBar: const BiboAppBar(title: 'WhatsApp'),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [

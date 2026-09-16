@@ -14,7 +14,9 @@ import 'package:bibomarketmobile/features/client/presentation/pages/message_page
 import 'package:bibomarketmobile/features/client/presentation/pages/shop_pages.dart';
 import 'package:bibomarketmobile/features/home/presentation/pages/home_page.dart';
 import 'package:bibomarketmobile/features/merchant/presentation/pages/dashboard_page.dart';
+import 'package:bibomarketmobile/features/merchant/presentation/pages/edit_profile_page.dart';
 import 'package:bibomarketmobile/features/merchant/presentation/pages/help_pages.dart';
+import 'package:bibomarketmobile/features/merchant/presentation/pages/merchant_settings_pages.dart';
 import 'package:bibomarketmobile/features/merchant/presentation/pages/messages_page.dart'
     as merchant_messages;
 import 'package:bibomarketmobile/features/merchant/presentation/pages/ops_pages.dart';
@@ -201,6 +203,52 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: AppRoutes.merchantHome,
                 builder: (context, state) => const DashboardPage(),
+                routes: [
+                  GoRoute(
+                    path: 'notifications',
+                    builder: (context, state) =>
+                        const MerchantNotificationsPage(),
+                    routes: [
+                      GoRoute(
+                        path: 'settings',
+                        builder: (context, state) =>
+                            const MerchantNotificationSettingsPage(),
+                      ),
+                    ],
+                  ),
+                  GoRoute(
+                    path: 'whatsapp',
+                    builder: (context, state) => const MerchantWhatsAppPage(),
+                  ),
+                  GoRoute(
+                    path: 'security',
+                    builder: (context, state) => const MerchantSecurityPage(),
+                  ),
+                  GoRoute(
+                    path: 'preferences',
+                    builder: (context, state) =>
+                        const MerchantPreferencesPage(),
+                  ),
+                  GoRoute(
+                    path: 'messages',
+                    builder: (context, state) =>
+                        const merchant_messages.MessagesPage(),
+                    routes: [
+                      GoRoute(
+                        path: ':id',
+                        builder: (context, state) {
+                          final id = int.tryParse(
+                                state.pathParameters['id'] ?? '',
+                              ) ??
+                              0;
+                          return merchant_messages.MessageThreadPage(
+                            partnerId: id,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ],
           ),
@@ -209,6 +257,20 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: AppRoutes.products,
                 builder: (context, state) => const ProductsPage(),
+                routes: [
+                  GoRoute(
+                    path: 'new',
+                    builder: (context, state) => const ProductFormPage(),
+                  ),
+                  GoRoute(
+                    path: ':id/edit',
+                    builder: (context, state) {
+                      final id =
+                          int.tryParse(state.pathParameters['id'] ?? '');
+                      return ProductFormPage(productId: id);
+                    },
+                  ),
+                ],
               ),
             ],
           ),
@@ -217,6 +279,18 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: AppRoutes.merchantOrders,
                 builder: (context, state) => const merchant_orders.OrdersPage(),
+                routes: [
+                  GoRoute(
+                    path: ':id',
+                    builder: (context, state) {
+                      final id = int.tryParse(
+                            state.pathParameters['id'] ?? '',
+                          ) ??
+                          0;
+                      return merchant_order.OrderDetailPage(orderId: id);
+                    },
+                  ),
+                ],
               ),
             ],
           ),
@@ -234,6 +308,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                 path: AppRoutes.merchantProfile,
                 builder: (context, state) =>
                     const merchant_profile.ProfilePage(),
+                routes: [
+                  GoRoute(
+                    path: 'edit',
+                    builder: (context, state) =>
+                        const MerchantEditProfilePage(),
+                  ),
+                ],
               ),
             ],
           ),
@@ -315,35 +396,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.preferences,
         builder: (context, state) => const PreferencesPage(),
-      ),
-      GoRoute(
-        path: AppRoutes.addProduct,
-        builder: (context, state) => const ProductFormPage(),
-      ),
-      GoRoute(
-        path: '/products/:id/edit',
-        builder: (context, state) {
-          final id = int.tryParse(state.pathParameters['id'] ?? '');
-          return ProductFormPage(productId: id);
-        },
-      ),
-      GoRoute(
-        path: '${AppRoutes.merchantOrders}/:id',
-        builder: (context, state) {
-          final id = int.tryParse(state.pathParameters['id'] ?? '') ?? 0;
-          return merchant_order.OrderDetailPage(orderId: id);
-        },
-      ),
-      GoRoute(
-        path: AppRoutes.merchantMessages,
-        builder: (context, state) => const merchant_messages.MessagesPage(),
-      ),
-      GoRoute(
-        path: '${AppRoutes.merchantMessages}/:id',
-        builder: (context, state) {
-          final id = int.tryParse(state.pathParameters['id'] ?? '') ?? 0;
-          return merchant_messages.MessageThreadPage(partnerId: id);
-        },
       ),
       GoRoute(
         path: AppRoutes.support,

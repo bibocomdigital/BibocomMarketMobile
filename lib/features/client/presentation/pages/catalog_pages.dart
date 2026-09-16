@@ -25,7 +25,11 @@ class CategoriesPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final categories = ref.watch(productCategoriesProvider);
     return Scaffold(
-      appBar: AppBar(title: Text(categoryName ?? 'Catégories')),
+      appBar: BiboAppBar(
+        title: categoryName ?? 'Catégories',
+        showBack: categoryId != null,
+        fallbackRoute: AppRoutes.categories,
+      ),
       body: categories.when(
         loading: () => const AppLoader(),
         error: (error, _) => ErrorView(
@@ -173,7 +177,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Recherche & Filtres')),
+      appBar: const BiboAppBar(title: 'Recherche & Filtres'),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -279,7 +283,7 @@ class _ProductDetailPageState extends ConsumerState<ProductDetailPage> {
     final product = ref.watch(productProvider(widget.productId));
     final comments = ref.watch(productCommentsProvider(widget.productId));
     return Scaffold(
-      appBar: AppBar(title: const Text('Détail produit')),
+      appBar: const BiboAppBar(title: 'Détail produit'),
       body: product.when(
         loading: () => const AppLoader(),
         error: (error, _) => ErrorView(

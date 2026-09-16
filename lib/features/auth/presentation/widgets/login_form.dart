@@ -1,5 +1,4 @@
 import 'package:bibomarketmobile/core/theme/app_colors.dart';
-import 'package:bibomarketmobile/features/merchant/presentation/widgets/merchant_ui.dart';
 import 'package:flutter/material.dart';
 
 class LoginForm extends StatefulWidget {
@@ -47,10 +46,11 @@ class _LoginFormState extends State<LoginForm> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
+            height: 48,
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
-              color: const Color(0xFFF1F5F9),
-              borderRadius: BorderRadius.circular(14),
+              color: const Color(0xFFF3F5F8),
+              borderRadius: BorderRadius.circular(24),
             ),
             child: Row(
               children: [
@@ -67,12 +67,11 @@ class _LoginFormState extends State<LoginForm> {
               ],
             ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 18),
           if (_useEmail)
-            MerchantTextField(
+            _LoginField(
               controller: _email,
-              hint: 'Email',
-              icon: Icons.mail_outline_rounded,
+              hint: 'Email ou téléphone',
               keyboardType: TextInputType.emailAddress,
               validator: (value) {
                 if (!_useEmail) return null;
@@ -83,10 +82,9 @@ class _LoginFormState extends State<LoginForm> {
               },
             )
           else
-            MerchantTextField(
+            _LoginField(
               controller: _phone,
               hint: 'Téléphone',
-              icon: Icons.phone_outlined,
               keyboardType: TextInputType.phone,
               validator: (value) {
                 if (_useEmail) return null;
@@ -96,19 +94,19 @@ class _LoginFormState extends State<LoginForm> {
                 return null;
               },
             ),
-          const SizedBox(height: 12),
-          MerchantTextField(
+          const SizedBox(height: 14),
+          _LoginField(
             controller: _password,
             hint: 'Mot de passe',
-            icon: Icons.lock_outline_rounded,
             obscure: _obscure,
             suffix: IconButton(
               onPressed: () => setState(() => _obscure = !_obscure),
               icon: Icon(
                 _obscure
-                    ? Icons.visibility_outlined
-                    : Icons.visibility_off_outlined,
+                    ? Icons.visibility_off_outlined
+                    : Icons.visibility_outlined,
                 color: AppColors.muted,
+                size: 20,
               ),
             ),
             validator: (value) {
@@ -118,6 +116,21 @@ class _LoginFormState extends State<LoginForm> {
               return null;
             },
           ),
+          const SizedBox(height: 10),
+          Align(
+            alignment: Alignment.centerRight,
+            child: GestureDetector(
+              onTap: () {},
+              child: const Text(
+                'Mot de passe oublié ?',
+                style: TextStyle(
+                  color: AppColors.muted,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ),
           if (widget.errorMessage != null) ...[
             const SizedBox(height: 12),
             Text(
@@ -125,12 +138,90 @@ class _LoginFormState extends State<LoginForm> {
               style: const TextStyle(color: AppColors.error, fontSize: 13),
             ),
           ],
-          const SizedBox(height: 20),
-          FilledButton(
-            onPressed: widget.isLoading ? null : _submit,
-            child: Text(widget.isLoading ? 'Connexion...' : 'Se connecter'),
+          const SizedBox(height: 16),
+          SizedBox(
+            height: 54,
+            child: FilledButton(
+              onPressed: widget.isLoading ? null : _submit,
+              style: FilledButton.styleFrom(
+                backgroundColor: AppColors.accent,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(28),
+                ),
+                textStyle: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              child: Text(widget.isLoading ? 'Connexion...' : 'Se connecter'),
+            ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _LoginField extends StatelessWidget {
+  const _LoginField({
+    required this.controller,
+    required this.hint,
+    this.obscure = false,
+    this.keyboardType,
+    this.validator,
+    this.suffix,
+  });
+
+  final TextEditingController controller;
+  final String hint;
+  final bool obscure;
+  final TextInputType? keyboardType;
+  final String? Function(String?)? validator;
+  final Widget? suffix;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      obscureText: obscure,
+      keyboardType: keyboardType,
+      validator: validator,
+      style: const TextStyle(
+        color: AppColors.primary,
+        fontSize: 15,
+        fontWeight: FontWeight.w500,
+      ),
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: const TextStyle(
+          color: Color(0xFF9AA6B2),
+          fontSize: 15,
+          fontWeight: FontWeight.w400,
+        ),
+        filled: true,
+        fillColor: const Color(0xFFF4F6F8),
+        suffixIcon: suffix,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 18,
+          vertical: 16,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: AppColors.secondary, width: 1.2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: AppColors.error),
+        ),
       ),
     );
   }
@@ -154,27 +245,17 @@ class _LoginTab extends StatelessWidget {
         onTap: onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 180),
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          decoration: BoxDecoration(
-            color: selected ? Colors.white : Colors.transparent,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: selected
-                ? [
-                    BoxShadow(
-                      color: AppColors.primary.withValues(alpha: 0.08),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ]
-                : null,
-          ),
           alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: selected ? AppColors.primary : Colors.transparent,
+            borderRadius: BorderRadius.circular(20),
+          ),
           child: Text(
             label,
             style: TextStyle(
               fontWeight: FontWeight.w700,
-              fontSize: 13,
-              color: selected ? AppColors.primary : AppColors.muted,
+              fontSize: 14,
+              color: selected ? Colors.white : AppColors.muted,
             ),
           ),
         ),

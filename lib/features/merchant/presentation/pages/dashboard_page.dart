@@ -52,6 +52,14 @@ class DashboardPage extends ConsumerWidget {
                   ),
                 ),
                 IconButton(
+                  onPressed: () =>
+                      context.push(AppRoutes.merchantNotifications),
+                  icon: const Icon(
+                    Icons.notifications_none_rounded,
+                    color: Colors.white,
+                  ),
+                ),
+                IconButton(
                   onPressed: () => context.push(AppRoutes.merchantMessages),
                   icon: const Icon(
                     Icons.chat_bubble_outline_rounded,

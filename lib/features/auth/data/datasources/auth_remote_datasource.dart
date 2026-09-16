@@ -66,6 +66,17 @@ class AuthRemoteDataSource {
     return UserModel.fromJson(asMap(map['user']) ?? map);
   }
 
+  Future<String> uploadProfilePhoto(String path) async {
+    final response = await _dio.post<dynamic>(
+      ApiEndpoints.usersProfilePhoto,
+      data: FormData.fromMap({
+        'photo': await MultipartFile.fromFile(path),
+      }),
+    );
+    final map = unwrapApiMap(response.data);
+    return asString(map['photoUrl'] ?? map['photo']);
+  }
+
   Future<void> completePersonalInfo(Map<String, dynamic> body) async {
     await _dio.post<dynamic>(ApiEndpoints.onboardingPersonal, data: body);
   }

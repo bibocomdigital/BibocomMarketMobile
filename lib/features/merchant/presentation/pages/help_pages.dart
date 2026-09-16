@@ -146,6 +146,37 @@ class SettingsPage extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(20, 8, 20, 28),
               children: [
                 MerchantMenuTile(
+                  icon: Icons.notifications_none_rounded,
+                  label: 'Notifications',
+                  onTap: () => context.push(AppRoutes.merchantNotifications),
+                ),
+                const SizedBox(height: 8),
+                MerchantMenuTile(
+                  icon: Icons.notifications_active_outlined,
+                  label: 'Paramètres de notifications',
+                  onTap: () =>
+                      context.push(AppRoutes.merchantNotificationSettings),
+                ),
+                const SizedBox(height: 8),
+                MerchantMenuTile(
+                  icon: Icons.lock_outline_rounded,
+                  label: 'Sécurité',
+                  onTap: () => context.push(AppRoutes.merchantSecurity),
+                ),
+                const SizedBox(height: 8),
+                MerchantMenuTile(
+                  icon: Icons.tune_rounded,
+                  label: 'Préférences',
+                  onTap: () => context.push(AppRoutes.merchantPreferences),
+                ),
+                const SizedBox(height: 8),
+                MerchantMenuTile(
+                  icon: Icons.chat_outlined,
+                  label: 'WhatsApp',
+                  onTap: () => context.push(AppRoutes.merchantWhatsapp),
+                ),
+                const SizedBox(height: 8),
+                MerchantMenuTile(
                   icon: Icons.verified_user_outlined,
                   label: 'Statut boutique',
                   onTap: () => context.push(AppRoutes.shopStatus),

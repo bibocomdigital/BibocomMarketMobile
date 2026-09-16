@@ -7,6 +7,16 @@ abstract final class StorageKeys {
   static const pendingShopSector = 'pending_shop_sector';
   static const pendingShopPhone = 'pending_shop_phone';
   static const pendingShopCategoryId = 'pending_shop_category_id';
+  static const notifyOrders = 'notify_orders';
+  static const notifyMessages = 'notify_messages';
+  static const notifyReviews = 'notify_reviews';
+  static const notifyPromo = 'notify_promo';
+  static const notifyEmail = 'notify_email';
+  static const twoFactorEnabled = 'two_factor_enabled';
+  static const prefLanguage = 'pref_language';
+  static const prefTimezone = 'pref_timezone';
+  static const prefDateFormat = 'pref_date_format';
+  static const prefCurrency = 'pref_currency';
 }
 
 abstract final class UserRoles {
@@ -58,6 +68,7 @@ abstract final class ApiEndpoints {
   static const changePassword = '/auth/change-password';
   static const deleteAccount = '/auth/account';
   static const usersProfile = '/users/profile';
+  static const usersProfilePhoto = '/users/profile/photo';
   static const profile = '/auth/profile';
   static const onboardingPersonal = '/auth/onboarding/personal';
   static const products = '/produit';

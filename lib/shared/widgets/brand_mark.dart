@@ -6,27 +6,40 @@ class BrandMark extends StatelessWidget {
     super.key,
     this.size = 56,
     this.dark = false,
+    this.circle = false,
+    this.backgroundColor,
+    this.foregroundColor,
   });
 
   final double size;
   final bool dark;
+  final bool circle;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
 
   @override
   Widget build(BuildContext context) {
+    final bg = backgroundColor ??
+        (dark ? Colors.white : AppColors.primary);
+    final fg = foregroundColor ??
+        (dark ? AppColors.primary : Colors.white);
+
     return Container(
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: dark ? Colors.white : AppColors.primary,
-        borderRadius: BorderRadius.circular(size * 0.28),
+        color: bg,
+        shape: circle ? BoxShape.circle : BoxShape.rectangle,
+        borderRadius: circle ? null : BorderRadius.circular(size * 0.28),
       ),
       alignment: Alignment.center,
       child: Text(
         'B',
         style: TextStyle(
-          color: dark ? AppColors.primary : Colors.white,
+          color: fg,
           fontSize: size * 0.5,
           fontWeight: FontWeight.w800,
+          height: 1,
         ),
       ),
     );

@@ -19,7 +19,15 @@ class MessagesPage extends ConsumerWidget {
       backgroundColor: AppColors.light,
       body: Column(
         children: [
-          const MerchantBackHeader(title: 'Messages'),
+          MerchantBackHeader(
+            title: 'Messages',
+            actions: [
+              IconButton(
+                onPressed: () => context.push(AppRoutes.merchantWhatsapp),
+                icon: const Icon(Icons.chat_outlined, color: Colors.white),
+              ),
+            ],
+          ),
           Expanded(
             child: conversations.when(
               loading: () => const AppLoader(),

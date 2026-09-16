@@ -1,5 +1,6 @@
 import 'package:bibomarketmobile/core/theme/app_colors.dart';
 import 'package:bibomarketmobile/core/theme/merchant_dimens.dart';
+import 'package:bibomarketmobile/shared/helpers/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -58,7 +59,7 @@ class MerchantBackHeader extends StatelessWidget {
         children: [
           _HeaderIconButton(
             icon: Icons.arrow_back_ios_new_rounded,
-            onTap: onBack ?? () => Navigator.of(context).maybePop(),
+            onTap: onBack ?? () => context.popOrFallback(),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -73,6 +74,57 @@ class MerchantBackHeader extends StatelessWidget {
           ),
           ...actions,
         ],
+      ),
+    );
+  }
+}
+
+class MerchantCenteredHeader extends StatelessWidget {
+  const MerchantCenteredHeader({
+    super.key,
+    required this.title,
+    this.onBack,
+    this.action,
+  });
+
+  final String title;
+  final VoidCallback? onBack;
+  final Widget? action;
+
+  @override
+  Widget build(BuildContext context) {
+    return MerchantHeader(
+      height: 100,
+      child: SizedBox(
+        height: 40,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: _HeaderIconButton(
+                icon: Icons.arrow_back_ios_new_rounded,
+                onTap: onBack ?? () => context.popOrFallback(),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 44),
+              child: Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ),
+            if (action != null)
+              Align(alignment: Alignment.centerRight, child: action),
+          ],
+        ),
       ),
     );
   }

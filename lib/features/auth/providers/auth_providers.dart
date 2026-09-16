@@ -155,6 +155,27 @@ class AuthNotifier extends Notifier<AuthState> {
     );
   }
 
+  Future<bool> uploadProfilePhoto(String path) async {
+    state = state.copyWith(isLoading: true, clearFailure: true);
+    final result =
+        await ref.read(authRepositoryProvider).uploadProfilePhoto(path);
+    return result.fold(
+      failure: (failure) {
+        state = state.copyWith(isLoading: false, failure: failure);
+        return false;
+      },
+      success: (user) {
+        final session = state.session;
+        if (session == null) {
+          state = state.copyWith(isLoading: false);
+          return false;
+        }
+        state = AuthState(session: AuthSession(token: session.token, user: user));
+        return true;
+      },
+    );
+  }
+
   Future<bool> updateProfile(Map<String, dynamic> body) async {
     state = state.copyWith(isLoading: true, clearFailure: true);
     final result = await ref.read(authRepositoryProvider).updateProfile(body);

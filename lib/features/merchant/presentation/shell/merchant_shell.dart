@@ -1,3 +1,4 @@
+import 'package:bibomarketmobile/config/router/app_routes.dart';
 import 'package:bibomarketmobile/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -9,9 +10,14 @@ class MerchantShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final path = GoRouterState.of(context).uri.path;
+    final hideBar = path == AppRoutes.merchantEditProfile;
+
     return Scaffold(
       body: navigationShell,
-      bottomNavigationBar: Container(
+      bottomNavigationBar: hideBar
+          ? null
+          : Container(
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [

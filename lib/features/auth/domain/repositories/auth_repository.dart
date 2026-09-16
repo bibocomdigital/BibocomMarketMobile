@@ -47,6 +47,8 @@ abstract class AuthRepository {
 
   Future<Result<User>> updateProfile(Map<String, dynamic> body);
 
+  Future<Result<User>> uploadProfilePhoto(String path);
+
   Future<Result<void>> completePersonalInfo(Map<String, dynamic> body);
 
   Future<Result<void>> changePassword({

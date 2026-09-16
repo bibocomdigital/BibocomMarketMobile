@@ -98,6 +98,8 @@ class ConversationModel {
       partnerId: asInt(map['partnerId']),
       partnerName: asString(map['partnerName'], 'Client'),
       partnerPhoto: map['partnerPhoto']?.toString(),
+      partnerPhone: (map['partnerPhone'] ?? map['phoneNumber'] ?? map['phone'])
+          ?.toString(),
       lastMessage: map['lastMessage']?.toString(),
       lastMessageTime: map['lastMessageTime']?.toString(),
       unreadCount: asInt(map['unreadCount']),

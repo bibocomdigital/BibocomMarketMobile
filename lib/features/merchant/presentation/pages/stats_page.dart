@@ -18,20 +18,7 @@ class StatsPage extends ConsumerWidget {
       backgroundColor: AppColors.light,
       body: Column(
         children: [
-          const MerchantHeader(
-            height: 120,
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Statistiques',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ),
-          ),
+          const MerchantCenteredHeader(title: 'Statistiques'),
           Expanded(
             child: Transform.translate(
               offset: const Offset(0, -16),

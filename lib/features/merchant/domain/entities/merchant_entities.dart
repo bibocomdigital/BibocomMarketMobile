@@ -81,10 +81,24 @@ class MerchantOrder {
   final String? clientPhone;
   final List<MerchantOrderItem> items;
 
-  bool get isDelivered {
-    final value = status.toUpperCase();
-    return value.contains('DELIVER') || value.contains('COMPLETE');
-  }
+  String get _status => status.toUpperCase();
+
+  bool get isCanceled =>
+      _status.contains('CANCEL') || _status.contains('ANNUL');
+
+  bool get isDelivered =>
+      _status.contains('DELIVER') || _status.contains('COMPLETE') || _status.contains('LIVR');
+
+  bool get isShipped =>
+      _status.contains('SHIP') || _status.contains('EXPED') || _status.contains('TRANSIT');
+
+  bool get isConfirmed =>
+      _status.contains('CONFIRM') ||
+      _status.contains('ACCEPT') ||
+      _status.contains('PAID');
+
+  bool get isPending =>
+      !isCanceled && !isDelivered && !isShipped && !isConfirmed;
 }
 
 class MerchantOrderItem {
@@ -106,6 +120,7 @@ class Conversation {
     required this.partnerId,
     required this.partnerName,
     this.partnerPhoto,
+    this.partnerPhone,
     this.lastMessage,
     this.lastMessageTime,
     this.unreadCount = 0,
@@ -114,6 +129,7 @@ class Conversation {
   final int partnerId;
   final String partnerName;
   final String? partnerPhoto;
+  final String? partnerPhone;
   final String? lastMessage;
   final String? lastMessageTime;
   final int unreadCount;

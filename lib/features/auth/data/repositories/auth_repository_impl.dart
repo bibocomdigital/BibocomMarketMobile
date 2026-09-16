@@ -139,6 +139,21 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<Result<User>> uploadProfilePhoto(String path) async {
+    try {
+      await _remote.uploadProfilePhoto(path);
+      final model = await _remote.getProfile();
+      final cached = await _local.readSession();
+      if (cached != null) {
+        await _local.cacheSession(cached.copyWithUser(model));
+      }
+      return Success(model.toEntity());
+    } catch (error) {
+      return Err(ErrorMapper.map(error));
+    }
+  }
+
+  @override
   Future<Result<void>> completePersonalInfo(Map<String, dynamic> body) async {
     try {
       await _remote.completePersonalInfo(body);

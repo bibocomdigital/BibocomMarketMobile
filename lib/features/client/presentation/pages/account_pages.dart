@@ -19,8 +19,8 @@ class NotificationsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final items = ref.watch(notificationsProvider);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Notifications'),
+      appBar: BiboAppBar(
+        title: 'Notifications',
         actions: [
           TextButton(
             onPressed: () async {
@@ -169,7 +169,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
   Widget build(BuildContext context) {
     final loading = ref.watch(authNotifierProvider).isLoading;
     return Scaffold(
-      appBar: AppBar(title: const Text('Modifier le profil')),
+      appBar: const BiboAppBar(title: 'Modifier le profil'),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -234,7 +234,7 @@ class _SecurityPageState extends ConsumerState<SecurityPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Sécurité')),
+      appBar: const BiboAppBar(title: 'Sécurité'),
       body: Form(
         key: _formKey,
         child: ListView(
@@ -272,16 +272,12 @@ class _SecurityPageState extends ConsumerState<SecurityPage> {
             const SizedBox(height: 24),
             OutlinedButton(
               onPressed: () async {
-                final confirmed = await showDialog<bool>(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text('Supprimer le compte'),
-                    content: const Text('Cette action est irréversible.'),
-                    actions: [
-                      TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Annuler')),
-                      TextButton(onPressed: () => Navigator.pop(context, true), child: const Text('Supprimer')),
-                    ],
-                  ),
+                final confirmed = await AppAlert.confirm(
+                  context,
+                  title: 'Supprimer le compte',
+                  message: 'Cette action est irréversible.',
+                  confirmLabel: 'Supprimer',
+                  destructive: true,
                 );
                 if (confirmed == true) {
                   await ref.read(authNotifierProvider.notifier).deleteAccount();
@@ -303,7 +299,7 @@ class PreferencesPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(authNotifierProvider).user;
     return Scaffold(
-      appBar: AppBar(title: const Text('Préférences')),
+      appBar: const BiboAppBar(title: 'Préférences'),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -338,7 +334,7 @@ class FavoritesPage extends ConsumerWidget {
     final following = ref.watch(followingProvider);
     final shops = ref.watch(shopsProvider).value ?? const [];
     return Scaffold(
-      appBar: AppBar(title: const Text('Favoris')),
+      appBar: const BiboAppBar(title: 'Favoris'),
       body: following.when(
         loading: () => const AppLoader(),
         error: (error, _) => ErrorView(

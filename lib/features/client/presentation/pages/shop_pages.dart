@@ -20,7 +20,7 @@ class ShopsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final shops = ref.watch(shopsProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Boutiques')),
+      appBar: const BiboAppBar(title: 'Boutiques'),
       body: shops.when(
         loading: () => const AppLoader(),
         error: (error, _) => ErrorView(
@@ -90,9 +90,9 @@ class _ShopDetailPageState extends ConsumerState<ShopDetailPage> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Boutique'),
-          bottom: const TabBar(
+        appBar: const BiboAppBar(
+          title: 'Boutique',
+          bottom: TabBar(
             indicatorColor: AppColors.accent,
             labelColor: Colors.white,
             unselectedLabelColor: Colors.white70,
@@ -261,7 +261,7 @@ class _ShopContactPageState extends ConsumerState<ShopContactPage> {
   Widget build(BuildContext context) {
     final details = ref.watch(shopDetailsProvider(widget.shopId)).value;
     return Scaffold(
-      appBar: AppBar(title: const Text('Contacter la boutique')),
+      appBar: const BiboAppBar(title: 'Contacter la boutique'),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [

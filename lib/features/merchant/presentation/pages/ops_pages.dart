@@ -3,6 +3,7 @@ import 'package:bibomarketmobile/core/theme/app_colors.dart';
 import 'package:bibomarketmobile/core/utils/json_utils.dart';
 import 'package:bibomarketmobile/features/merchant/presentation/widgets/merchant_ui.dart';
 import 'package:bibomarketmobile/features/merchant/providers/merchant_providers.dart';
+import 'package:bibomarketmobile/shared/helpers/context_extensions.dart';
 import 'package:bibomarketmobile/shared/widgets/app_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -142,12 +143,8 @@ class PromotionsPage extends StatelessWidget {
                       const SizedBox(height: 16),
                       FilledButton(
                         onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Les promotions seront branchées dès que l’API sera disponible.',
-                              ),
-                            ),
+                          context.showSnack(
+                            'Les promotions seront branchées dès que l’API sera disponible.',
                           );
                         },
                         child: const Text('Créer une promotion'),
@@ -315,12 +312,8 @@ class WithdrawPage extends StatelessWidget {
                       const SizedBox(height: 20),
                       FilledButton(
                         onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Demande de retrait envoyée. Elle sera traitée dès que le backend l’exposera.',
-                              ),
-                            ),
+                          context.showSnack(
+                            'Demande de retrait envoyée. Elle sera traitée dès que le backend l’exposera.',
                           );
                         },
                         child: const Text('Demander le retrait'),

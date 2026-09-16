@@ -67,6 +67,34 @@ abstract final class AppTheme {
           ),
         ),
       ),
+      snackBarTheme: const SnackBarThemeData(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        contentTextStyle: TextStyle(
+          color: AppColors.primary,
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        shadowColor: const Color(0x1A0A2340),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+        ),
+        titleTextStyle: const TextStyle(
+          color: AppColors.primary,
+          fontSize: 18,
+          fontWeight: FontWeight.w800,
+        ),
+        contentTextStyle: const TextStyle(
+          color: AppColors.muted,
+          fontSize: 14,
+          height: 1.35,
+        ),
+      ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: Colors.white,

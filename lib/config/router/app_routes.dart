@@ -36,7 +36,13 @@ abstract final class AppRoutes {
   static const merchantOrders = '/merchant/orders';
   static const stats = '/stats';
   static const merchantProfile = '/merchant/profile';
+  static const merchantEditProfile = '/merchant/profile/edit';
   static const merchantMessages = '/merchant/messages';
+  static const merchantNotifications = '/merchant/notifications';
+  static const merchantNotificationSettings = '/merchant/notifications/settings';
+  static const merchantSecurity = '/merchant/security';
+  static const merchantPreferences = '/merchant/preferences';
+  static const merchantWhatsapp = '/merchant/whatsapp';
   static const support = '/support';
   static const faq = '/faq';
   static const settings = '/settings';
@@ -75,7 +81,13 @@ abstract final class AppRoutes {
     merchantOrders,
     stats,
     merchantProfile,
+    merchantEditProfile,
     merchantMessages,
+    merchantNotifications,
+    merchantNotificationSettings,
+    merchantSecurity,
+    merchantPreferences,
+    merchantWhatsapp,
     support,
     faq,
     settings,

@@ -7,6 +7,12 @@
 		<string>whatsapp</string>
 		<string>https</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Bibo Market a besoin de l’appareil photo pour ajouter le logo de votre boutique et les photos de produits.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Bibo Market a besoin d’accéder à vos photos pour le logo de la boutique et les images de produits.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Bibo Market peut enregistrer des photos dans votre galerie.</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
